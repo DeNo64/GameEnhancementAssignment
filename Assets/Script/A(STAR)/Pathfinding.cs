@@ -19,6 +19,7 @@ public class Pathfinding : MonoBehaviour {
 
 	public Vector3[] FindPath(Vector3 startPos, Vector3 goalPos)
     {
+        float startTime = Time.realtimeSinceStartup;
         Node startNode = grid.NodeFromWorldPoint(startPos);
         Node goalNode = grid.NodeFromWorldPoint(goalPos);
 
@@ -43,6 +44,7 @@ public class Pathfinding : MonoBehaviour {
             if(currentNode == goalNode)
             {
                 Vector3[] path = GetPath(startNode, goalNode);
+                print("Time Taken: " + (Time.realtimeSinceStartup - startTime));
                 return path;
             }
 

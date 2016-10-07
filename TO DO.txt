@@ -1,0 +1,7 @@
+Textures
+Models
+More levels (How Many? (I'm thinking 6 to 9, with varying lengths. 
+	The last levels would be about 3 times larger than the first ones))
+
+Fix Level 2 Raycast not detecting wall (GaveOver.cs lines 41 to 61)
+Fix Level 2 Enemy pathing is wrong after one or two loops of the waypoints

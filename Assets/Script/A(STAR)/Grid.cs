@@ -15,6 +15,7 @@ public class Grid : MonoBehaviour {
 
     public Node NodeFromWorldPoint(Vector3 worldPosition)
     {
+        worldPosition -= transform.position; // Allows the grid to be moved
         float percentX = (worldPosition.x + gridWorldSize.x / 2) / gridWorldSize.x;
         float percentY = (worldPosition.z + gridWorldSize.y / 2) / gridWorldSize.y;
 

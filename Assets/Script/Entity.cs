@@ -5,19 +5,51 @@ using System.Collections.Generic;
 
 public class Entity : MonoBehaviour
 {
-
     public int HitPoints = 10;
     public float movementSpeed = 0.02f;
     public GameObject player;
+    public string waypointPath;
+    public int gameLevel;
 
+    Vector3 spawnLoc;
+    LevelManager levelManager;
     Vector3[] path;
     int targetIndex;
     Pathfinding pathFinding;
     Vector3 currentWaypoint;
-    float time;
+    float time = 0.0f;
 
     List<Vector3> waypoints = new List<Vector3>();
     bool atWaypoint = false;
+
+    void Start()
+    {
+        spawnLoc = transform.position;
+        levelManager = GameObject.Find("MasterController").GetComponent<LevelManager>();
+        Transform enemyWaypoints = GameObject.Find("EnemyWaypoints/WaypointSet" + waypointPath).transform;
+        for (int i = 0; i < enemyWaypoints.childCount; i++)
+        {
+            waypoints.Add(enemyWaypoints.GetChild(i).position);
+            //print(enemyWaypoints.GetChild(i).name);
+        }
+
+        currentWaypoint = GetClosestWaypoint();
+
+        pathFinding = GameObject.Find("MasterController").GetComponent<Pathfinding>();
+        path = pathFinding.FindPath(transform.position, currentWaypoint);
+
+        StopCoroutine("FollowPath");
+        StartCoroutine("FollowPath");
+    }
+
+    public void ResetEnemy()
+    {
+        StopCoroutine("FollowPath");
+        transform.position = spawnLoc;
+        currentWaypoint = GetClosestWaypoint();
+        path = pathFinding.FindPath(transform.position, currentWaypoint);
+        StartCoroutine("FollowPath");
+    }
 
     void Update()
     {
@@ -40,11 +72,18 @@ public class Entity : MonoBehaviour
 
         if(CheckPlayerVisability())
         {
+            time += Time.deltaTime;
             currentWaypoint = player.transform.position;
-
-            path = pathFinding.FindPath(transform.position, currentWaypoint);
-            StopCoroutine("FollowPath");
-            StartCoroutine("FollowPath");
+            if (time > 0.2f)
+            {
+                path = pathFinding.FindPath(transform.position, currentWaypoint);
+                if (path != null)
+                {
+                    StopCoroutine("FollowPath");
+                    StartCoroutine("FollowPath");
+                }
+                time = 0.0f;
+            }
         }
     }
 
@@ -54,39 +93,27 @@ public class Entity : MonoBehaviour
         GameLogic.entitiesAlive--;
     }
 
-    void Start()
-    {
-        var enemyWaypoints = GameObject.Find(this.gameObject.name + "Waypoints").transform;
-        for (int i = 0; i < enemyWaypoints.childCount; i++)
-            waypoints.Add(enemyWaypoints.GetChild(i).position);
-
-        currentWaypoint = GetClosestWaypoint();
-
-        pathFinding = GameObject.Find("MasterController").GetComponent<Pathfinding>();
-        path = pathFinding.FindPath(transform.position, currentWaypoint);
-
-        StopCoroutine("FollowPath");
-        StartCoroutine("FollowPath");
-    }
-
     IEnumerator FollowPath()
     {
         Vector3 currentWaypoint = path[0];
 
         while (true)
         {
-            if (transform.position == currentWaypoint)
+            if (gameLevel == levelManager.currentLevel)
             {
-                targetIndex++;
-                if (targetIndex >= path.Length)
+                if (transform.position == currentWaypoint)
                 {
-                    atWaypoint = true;
-                    yield break;
+                    targetIndex++;
+                    if (targetIndex >= path.Length)
+                    {
+                        atWaypoint = true;
+                        yield break;
+                    }
+                    currentWaypoint = path[targetIndex];
                 }
-                currentWaypoint = path[targetIndex];
-            }
 
-            transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, movementSpeed * (1 + (0.5f * Hud.waveNum)));
+                transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, movementSpeed * (1 + (0.5f * Hud.waveNum)));
+            }
             yield return null;
         }
     }
@@ -161,7 +188,7 @@ public class Entity : MonoBehaviour
         var rayDirection = player.transform.position - transform.position;
         if (Physics.Raycast(transform.position, rayDirection, out hit))
         {
-            if (hit.transform == player.transform)
+            if (hit.collider.tag == "Player")
             {
                 return true;
             }
