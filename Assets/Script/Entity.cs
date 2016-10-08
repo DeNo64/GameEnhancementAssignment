@@ -60,7 +60,24 @@ public class Entity : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-        if (atWaypoint)
+        if (CheckPlayerVisability())
+        {
+            time += Time.deltaTime;
+            currentWaypoint = player.transform.position;
+            if (time > 0.2f)
+            {
+                path = pathFinding.FindPath(transform.position, currentWaypoint);
+                if(path == null)
+                {
+                    throw new System.Exception("Path Was Not Found!");
+                }
+
+                StopCoroutine("FollowPath");
+                StartCoroutine("FollowPath");
+                time = 0.0f;
+            }
+        }
+        else if (atWaypoint)
         {
             currentWaypoint = waypoints[GetIndexOfWaypoint(currentWaypoint) + 1];
             atWaypoint = false;
@@ -68,23 +85,7 @@ public class Entity : MonoBehaviour
             path = pathFinding.FindPath(transform.position, currentWaypoint);
             StopCoroutine("FollowPath");
             StartCoroutine("FollowPath");
-        }
-
-        if(CheckPlayerVisability())
-        {
-            time += Time.deltaTime;
-            currentWaypoint = player.transform.position;
-            if (time > 0.2f)
-            {
-                path = pathFinding.FindPath(transform.position, currentWaypoint);
-                if (path != null)
-                {
-                    StopCoroutine("FollowPath");
-                    StartCoroutine("FollowPath");
-                }
-                time = 0.0f;
-            }
-        }
+        }        
     }
 
     void OnDestroy()
@@ -112,7 +113,7 @@ public class Entity : MonoBehaviour
                     currentWaypoint = path[targetIndex];
                 }
 
-                transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, movementSpeed * (1 + (0.5f * Hud.waveNum)));
+                transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, movementSpeed * Time.deltaTime);
             }
             yield return null;
         }
@@ -145,7 +146,8 @@ public class Entity : MonoBehaviour
                 {
                     Gizmos.DrawLine(transform.position, path[i]);
                 }
-                else {
+                else
+                {
                     Gizmos.DrawLine(path[i - 1], path[i]);
                 }
             }
@@ -188,7 +190,8 @@ public class Entity : MonoBehaviour
         var rayDirection = player.transform.position - transform.position;
         if (Physics.Raycast(transform.position, rayDirection, out hit))
         {
-            if (hit.collider.tag == "Player")
+            Debug.DrawRay(transform.position, rayDirection, Color.black);
+            if (hit.collider.tag == "PlayerTagRange")
             {
                 return true;
             }

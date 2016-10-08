@@ -6,6 +6,7 @@ public class LevelManager : MonoBehaviour {
     public int currentLevel = 0;
     public GameObject[] enemys;
     public GameObject player;
+    public Transform respawnLocations;
 
     // Use this for initialization
     void Start () {
@@ -25,14 +26,15 @@ public class LevelManager : MonoBehaviour {
         }
     }
 
-    public void OpenLastDoor()
+    public void OpenLastDoor(int lastLevel)
     {
-        GameObject.Find("StartDoor" + currentLevel).GetComponent<Door>().OpenDoor();
+        GameObject.Find("StartDoor" + (lastLevel)).GetComponent<Door>().OpenDoor();
+        GameObject.Find("EndDoor" + (lastLevel)).GetComponent<Door>().OpenDoor();  // If you're in the door when the enemy catches you the door breaks
     }
 
     public void RespawnPlayer()
     {
-        GameObject respawnLoc = GameObject.Find("Level" + currentLevel);
+        GameObject respawnLoc = respawnLocations.GetChild(currentLevel-1).gameObject;
         player.transform.position = respawnLoc.transform.position;
     }
 

@@ -22,10 +22,17 @@ public class Pathfinding : MonoBehaviour {
         float startTime = Time.realtimeSinceStartup;
         Node startNode = grid.NodeFromWorldPoint(startPos);
         Node goalNode = grid.NodeFromWorldPoint(goalPos);
+        bool goalWalkableChanged = false;
 
         List<Node> open = new List<Node>();
         List<Node> closed = new List<Node>();
         open.Add(startNode);
+
+        if (!goalNode.walkable)
+        {
+            goalNode.walkable = true;
+            goalWalkableChanged = true;
+        }
 
         while(open.Count > 0)
         {
@@ -44,7 +51,9 @@ public class Pathfinding : MonoBehaviour {
             if(currentNode == goalNode)
             {
                 Vector3[] path = GetPath(startNode, goalNode);
-                print("Time Taken: " + (Time.realtimeSinceStartup - startTime));
+                //print("Time Taken: " + (Time.realtimeSinceStartup - startTime));
+                if (goalWalkableChanged)
+                    goalNode.walkable = false;
                 return path;
             }
 

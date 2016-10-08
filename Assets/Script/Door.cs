@@ -48,7 +48,7 @@ public class Door : MonoBehaviour {
                 levelManager.NewLevel();
             } else
             {
-                levelManager.currentLevel = 0;
+                //levelManager.currentLevel = 0;
             }
         } else if (other.tag == "Player") {
             renderer.material.color = Color.green;
@@ -64,6 +64,6 @@ public class Door : MonoBehaviour {
     public void CloseDoor()
     {
         doorCollider.isTrigger = false;
-        renderer.material.color = Color.red;
+        renderer.material.color = Color.red; // should this be changed to be the same colour as the walls. To 'hide' the door?
     }
 }

@@ -1,0 +1,13 @@
+defrule
+distance smaller 5
+=>
+advance 0.1
+defrule
+distance greater 5
+=>
+advance 0.01
+shoot
+defrule
+distance = 5
+=>
+advance 0.01

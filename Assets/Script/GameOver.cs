@@ -5,6 +5,7 @@ public class GameOver : MonoBehaviour {
 
     public GameObject player;
     LevelManager levelManager;
+    int respawnTime = 5;
 
 	// Use this for initialization
 	void Start () {
@@ -30,11 +31,12 @@ public class GameOver : MonoBehaviour {
 
     IEnumerator RespawnTimer()
     {
-        yield return new WaitForSeconds(0);
         levelManager.RespawnPlayer();
         levelManager.ResetEnemys();
-        levelManager.OpenLastDoor();
+        int currentLevel = levelManager.currentLevel;
         levelManager.currentLevel = 0;
+        yield return new WaitForSeconds(respawnTime);   // this wait is breaking the program because if you wait then the coroutine will fire again because the player is still touching the enemey        
+        levelManager.OpenLastDoor(currentLevel);        // fixed the WaitForSeconds bug very badly but YOLO its just Uni
         yield return null;
     }
 
