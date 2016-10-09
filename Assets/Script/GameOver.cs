@@ -6,6 +6,7 @@ public class GameOver : MonoBehaviour {
     public GameObject player;
     LevelManager levelManager;
     int respawnTime = 5;
+    bool caught = false;
 
 	// Use this for initialization
 	void Start () {
@@ -19,8 +20,9 @@ public class GameOver : MonoBehaviour {
 
     void OnTriggerStay(Collider other)
     {
-        if (other.tag == "Enemy" && CheckPlayerVisability(player.transform, other.transform))
+        if (other.tag == "Enemy" && CheckPlayerVisability(player.transform, other.transform) && !caught)
         {
+            caught = true;
             print("Caught!");
             // Play Death Animation
             // Show "Caught" text on screen (Fade in?)
@@ -31,12 +33,15 @@ public class GameOver : MonoBehaviour {
 
     IEnumerator RespawnTimer()
     {
+        // Commented this out for now because it's easier for testing
+        // Has the introduction of the boolean 'caught' fixed this?
+        //yield return new WaitForSeconds(respawnTime);   // this wait is breaking the program because if you wait then the coroutine will fire again because the player is still touching the enemey        
         levelManager.RespawnPlayer();
         levelManager.ResetEnemys();
         int currentLevel = levelManager.currentLevel;
         levelManager.currentLevel = 0;
-        yield return new WaitForSeconds(respawnTime);   // this wait is breaking the program because if you wait then the coroutine will fire again because the player is still touching the enemey        
         levelManager.OpenLastDoor(currentLevel);        // fixed the WaitForSeconds bug very badly but YOLO its just Uni
+        caught = false;
         yield return null;
     }
 
