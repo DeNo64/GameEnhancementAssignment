@@ -21,6 +21,7 @@ public class Entity : MonoBehaviour
 
     List<Vector3> waypoints = new List<Vector3>();
     bool atWaypoint = false;
+    bool followingPlayer = false;
 
     void Start()
     {
@@ -76,9 +77,11 @@ public class Entity : MonoBehaviour
                 StartCoroutine("FollowPath");
                 time = 0.0f;
             }
+            followingPlayer = true;
         }
-        else if (atWaypoint)
+        else if (atWaypoint || followingPlayer)
         {
+            followingPlayer = false;
             currentWaypoint = waypoints[GetIndexOfWaypoint(currentWaypoint) + 1];
             atWaypoint = false;
 
