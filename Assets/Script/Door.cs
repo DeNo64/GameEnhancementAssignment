@@ -46,9 +46,10 @@ public class Door : MonoBehaviour {
             {
                 levelManager.currentLevel = levelNum;
                 levelManager.NewLevel();
-            } else
+            }
+            else
             {
-                //levelManager.currentLevel = 0;
+                levelManager.currentLevel = 0; // Intermediate level to pause all AI
             }
         } else if (other.tag == "Player") {
             renderer.material.color = Color.green;

@@ -60,35 +60,38 @@ public class Entity : MonoBehaviour
             Hud.budget += 10;
             Destroy(this.gameObject);
         }
-
-        if (CheckPlayerVisability())
+        if (gameLevel == levelManager.currentLevel)
         {
-            time += Time.deltaTime;
-            currentWaypoint = player.transform.position;
-            if (time > 0.2f)
+            if (CheckPlayerVisability())
             {
-                path = pathFinding.FindPath(transform.position, currentWaypoint);
-                if(path == null)
+                time += Time.deltaTime;
+                currentWaypoint = player.transform.position;
+                if (time > 0.2f)
                 {
-                    throw new System.Exception("Path Was Not Found!");
-                }
+                    path = pathFinding.FindPath(transform.position, currentWaypoint);
+                    if (path == null)
+                    {
+                        throw new System.Exception("Path Was Not Found!");
+                    }
 
+                    StopCoroutine("FollowPath");
+                    StartCoroutine("FollowPath");
+                    time = 0.0f;
+                }
+                followingPlayer = true;
+            }
+            else if (atWaypoint || followingPlayer)
+            {
+                followingPlayer = false;
+                print(GetIndexOfWaypoint(currentWaypoint) + 1);
+                currentWaypoint = waypoints[GetIndexOfWaypoint(currentWaypoint) + 1];
+                atWaypoint = false;
+
+                path = pathFinding.FindPath(transform.position, currentWaypoint);
                 StopCoroutine("FollowPath");
                 StartCoroutine("FollowPath");
-                time = 0.0f;
             }
-            followingPlayer = true;
         }
-        else if (atWaypoint || followingPlayer)
-        {
-            followingPlayer = false;
-            currentWaypoint = waypoints[GetIndexOfWaypoint(currentWaypoint) + 1];
-            atWaypoint = false;
-
-            path = pathFinding.FindPath(transform.position, currentWaypoint);
-            StopCoroutine("FollowPath");
-            StartCoroutine("FollowPath");
-        }        
     }
 
     void OnDestroy()
@@ -111,6 +114,7 @@ public class Entity : MonoBehaviour
                     if (targetIndex >= path.Length)
                     {
                         atWaypoint = true;
+                        targetIndex = 0;
                         yield break;
                     }
                     currentWaypoint = path[targetIndex];
