@@ -1,29 +1,34 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameOver : MonoBehaviour {
+public class GameOver : MonoBehaviour
+{
 
     public GameObject player;
     LevelManager levelManager;
-    int respawnTime = 5;
+    int respawnTime = 5; // Seconds
     bool caught = false;
+    int timesCaught = 0;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         levelManager = GameObject.Find("MasterController").GetComponent<LevelManager>();
     }
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 
     void OnTriggerStay(Collider other)
     {
         if (other.tag == "Enemy" && CheckPlayerVisability(player.transform, other.transform) && !caught)
         {
             caught = true;
-            print("Caught!");
+            print("Caught! (Level " + levelManager.currentLevel + ")");
+            timesCaught++;
             // Play Death Animation
             // Show "Caught" text on screen (Fade in?)
             // Wait a few (5?) seconds and Respawn at the last checkpoint (Show Timer Until Respawn)
@@ -35,12 +40,13 @@ public class GameOver : MonoBehaviour {
     {
         // Commented this out for now because it's easier for testing
         // Has the introduction of the boolean 'caught' fixed this?
-        //yield return new WaitForSeconds(respawnTime);   // this wait is breaking the program because if you wait then the coroutine will fire again because the player is still touching the enemey        
+        //yield return new WaitForSeconds(respawnTime);   // this wait is breaking the program because if you wait then the coroutine will fire again because the player is still touching the enemy        
         levelManager.RespawnPlayer();
         levelManager.ResetEnemys();
         int currentLevel = levelManager.currentLevel;
+        levelManager.showPrevious3DText();
+        levelManager.OpenLastDoor(currentLevel);
         levelManager.currentLevel = 0;
-        levelManager.OpenLastDoor(currentLevel);        // fixed the WaitForSeconds bug very badly but YOLO its just Uni
         caught = false;
         yield return null;
     }
@@ -50,20 +56,39 @@ public class GameOver : MonoBehaviour {
         RaycastHit[] hits;
         var rayDirection = player.position - enemy.position;
         hits = Physics.RaycastAll(enemy.position, rayDirection, Vector3.Distance(player.position, enemy.position));
-        if (hits.Length > 0) // Sometimes this doesn't detect the wall so the player dies when in cover.
+        if (hits.Length > 0)
         {
+            float playerDist = 1001f;
+            float closest = 1000f;
             for (int i = 0; i < hits.Length; i++)
             {
                 if (hits[i].collider.tag == "Player")
                 {
-                    break;
+                    playerDist = hits[i].distance;
                 }
-                else
+                if (hits[i].distance < closest && hits[i].collider.tag != "PlayerTagRange")
                 {
-                    return false;
+                    closest = hits[i].distance;
                 }
             }
+            if (playerDist == closest)
+            {
+                return true;
+            }
         }
-        return true;
+        return false;
+        /*for (int i = 0; i < hits.Length; i++)
+        {
+            if (hits[i].collider.tag == "Player")
+            {
+                break;
+            }
+            else
+            {
+                print(hits[i].collider.tag);
+                return false;
+            }
+        }
+    return true;*/
     }
 }

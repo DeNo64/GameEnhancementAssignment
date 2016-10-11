@@ -44,11 +44,12 @@ public class Door : MonoBehaviour {
             CloseDoor();
             if (startDoor)
             {
+                levelManager.update3DText(true, levelNum);
                 levelManager.currentLevel = levelNum;
-                levelManager.NewLevel();
             }
             else
             {
+                levelManager.update3DText(false, 0);
                 levelManager.currentLevel = 0; // Intermediate level to pause all AI
             }
         } else if (other.tag == "Player") {

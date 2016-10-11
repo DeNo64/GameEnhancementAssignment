@@ -34,7 +34,7 @@ public class Entity : MonoBehaviour
             //print(enemyWaypoints.GetChild(i).name);
         }
 
-        currentWaypoint = GetClosestWaypoint();
+        currentWaypoint = GetClosestWaypoint(transform);
 
         pathFinding = GameObject.Find("MasterController").GetComponent<Pathfinding>();
         path = pathFinding.FindPath(transform.position, currentWaypoint);
@@ -47,8 +47,9 @@ public class Entity : MonoBehaviour
     {
         StopCoroutine("FollowPath");
         transform.position = spawnLoc;
-        currentWaypoint = GetClosestWaypoint();
+        currentWaypoint = GetClosestWaypoint(transform);
         path = pathFinding.FindPath(transform.position, currentWaypoint);
+        followingPlayer = false;
         StartCoroutine("FollowPath");
     }
 
@@ -82,9 +83,17 @@ public class Entity : MonoBehaviour
             }
             else if (atWaypoint || followingPlayer)
             {
-                followingPlayer = false;
-                print(GetIndexOfWaypoint(currentWaypoint) + 1);
-                currentWaypoint = waypoints[GetIndexOfWaypoint(currentWaypoint) + 1];
+                if (followingPlayer)
+                {
+                    currentWaypoint = GetClosestWaypoint(player.transform);
+                    followingPlayer = false;
+                }
+                else
+                {
+                    currentWaypoint = waypoints[GetIndexOfWaypoint(currentWaypoint) + 1];
+                }
+                
+                //print(GetIndexOfWaypoint(currentWaypoint) + 1);
                 atWaypoint = false;
 
                 path = pathFinding.FindPath(transform.position, currentWaypoint);
@@ -171,20 +180,20 @@ public class Entity : MonoBehaviour
         return index;
     }
 
-    Vector3 GetClosestWaypoint()
+    Vector3 GetClosestWaypoint(Transform currentPos)
     {
         Vector3 closestWaypoint = waypoints[0];
         foreach (var waypoint in waypoints)
         {
-            float currentDistance = Vector3.Distance(transform.position, closestWaypoint);
-            float nextDistance = Vector3.Distance(transform.position, waypoint);
+            float currentDistance = Vector3.Distance(currentPos.position, closestWaypoint);
+            float nextDistance = Vector3.Distance(currentPos.position, waypoint);
 
             if (currentDistance > nextDistance)
             {
                 closestWaypoint = waypoint;
             }
         }
-        if (Vector3.Distance(transform.position, closestWaypoint) < 1)
+        if (Vector3.Distance(currentPos.position, closestWaypoint) < 1)
         {
             closestWaypoint = waypoints[GetIndexOfWaypoint(closestWaypoint) + 1];
         }
@@ -193,12 +202,35 @@ public class Entity : MonoBehaviour
 
     bool CheckPlayerVisability()
     {
-        RaycastHit hit;
+        RaycastHit[] hits;
         var rayDirection = player.transform.position - transform.position;
-        if (Physics.Raycast(transform.position, rayDirection, out hit))
+        hits = Physics.RaycastAll(transform.position, rayDirection, Vector3.Distance(player.transform.position, transform.position));
+        if (hits.Length > 0) 
+        {
+            float playerDist = 1001f;
+            float closest = 1000f;
+            for (int i = 0; i < hits.Length; i++)
+            {
+                if (hits[i].collider.tag == "Player")
+                {
+                    playerDist = hits[i].distance;
+                }
+                if (hits[i].distance < closest && hits[i].collider.tag != "PlayerTagRange")
+                {
+                    closest = hits[i].distance;
+                }
+            }
+            if (playerDist == closest)
+            {
+                return true;
+            }
+        }
+        return false;
+
+        /*if (Physics.Raycast(transform.position, rayDirection, out hit))
         {
             Debug.DrawRay(transform.position, rayDirection, Color.black);
-            if (hit.collider.tag == "PlayerTagRange")
+            if (hit.collider.tag == "Player")
             {
                 return true;
             }
@@ -209,6 +241,6 @@ public class Entity : MonoBehaviour
 
         }
         else
-            return false;
+            return false; */
     }
 }

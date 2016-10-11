@@ -6,6 +6,7 @@ public class LevelManager : MonoBehaviour {
     public int currentLevel = 0;
     public GameObject[] enemys;
     public GameObject player;
+    public GameObject textContainer;
     public Transform respawnLocations;
 
     // Use this for initialization
@@ -38,17 +39,21 @@ public class LevelManager : MonoBehaviour {
         player.transform.position = respawnLoc.transform.position;
     }
 
-    public void NewLevel()
+    public void showPrevious3DText()
     {
-        switch (currentLevel)
+        GameObject.Find("Level" + currentLevel + "Text").GetComponent<MeshRenderer>().enabled = true;
+    }
+
+    public void update3DText(bool newRoom, int roomNum) // Is the room we're entering an actual level?
+    {
+        if (newRoom)
         {
-            case 0:
-                break;
-
-            default:
-                break;
+            GameObject.Find("Level" + roomNum + "Text").GetComponent<MeshRenderer>().enabled = false;
         }
-
-
+        else
+        {
+            GameObject.Find("Level" + (currentLevel + 1) + "Text").GetComponent<MeshRenderer>().enabled = true;
+        }
+        
     }
 }
