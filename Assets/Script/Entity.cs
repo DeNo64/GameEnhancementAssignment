@@ -37,10 +37,10 @@ public class Entity : MonoBehaviour
         currentWaypoint = GetClosestWaypoint(transform);
 
         pathFinding = GameObject.Find("MasterController").GetComponent<Pathfinding>();
-        path = pathFinding.FindPath(transform.position, currentWaypoint);
+        //path = pathFinding.FindPath(transform.position, currentWaypoint);
 
-        StopCoroutine("FollowPath");
-        StartCoroutine("FollowPath");
+        //StopCoroutine("FollowPath");
+        //StartCoroutine("FollowPath");
     }
 
     public void ResetEnemy()
@@ -48,8 +48,12 @@ public class Entity : MonoBehaviour
         StopCoroutine("FollowPath");
         transform.position = spawnLoc;
         currentWaypoint = GetClosestWaypoint(transform);
-        path = pathFinding.FindPath(transform.position, currentWaypoint);
         followingPlayer = false;
+    }
+
+    public void FindPath()
+    {
+        path = pathFinding.FindPath(transform.position, currentWaypoint);
         StartCoroutine("FollowPath");
     }
 

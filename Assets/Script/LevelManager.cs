@@ -8,6 +8,7 @@ public class LevelManager : MonoBehaviour {
     public GameObject player;
     public GameObject textContainer;
     public Transform respawnLocations;
+    public Vector2[] gridTransform;
 
     // Use this for initialization
     void Start () {
@@ -55,5 +56,12 @@ public class LevelManager : MonoBehaviour {
             GameObject.Find("Level" + (currentLevel + 1) + "Text").GetComponent<MeshRenderer>().enabled = true;
         }
         
+    }
+
+    public void translateGrid()
+    {
+        this.transform.position = new Vector3(gridTransform[currentLevel].x, 0.5f, gridTransform[currentLevel].y);
+        var pathFinder = this.GetComponent<Pathfinding>();
+        pathFinder.RefreshGrid();
     }
 }

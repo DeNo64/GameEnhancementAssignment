@@ -44,12 +44,23 @@ public class Door : MonoBehaviour {
             CloseDoor();
             if (startDoor)
             {
-                levelManager.update3DText(true, levelNum);
+                //levelManager.update3DText(true, levelNum);
                 levelManager.currentLevel = levelNum;
+                levelManager.translateGrid();
+                GameObject enemies = GameObject.Find("Enemys");
+                for (int i = 0; i < enemies.transform.childCount; i++)
+                {
+                    Entity enemyScript = enemies.transform.GetChild(i).GetComponent<Entity>();
+                    if (enemyScript.gameLevel == levelNum)
+                    {
+                        enemyScript.ResetEnemy();
+                        enemyScript.FindPath();
+                    }
+                }
             }
             else
             {
-                levelManager.update3DText(false, 0);
+                //levelManager.update3DText(false, 0);
                 levelManager.currentLevel = 0; // Intermediate level to pause all AI
             }
         } else if (other.tag == "Player") {

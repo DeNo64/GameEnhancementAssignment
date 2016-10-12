@@ -127,4 +127,9 @@ public class Pathfinding : MonoBehaviour {
         }
         return waypoints.ToArray();
     }
+
+    public void RefreshGrid()
+    {
+        grid.CreateGrid();
+    }
 }

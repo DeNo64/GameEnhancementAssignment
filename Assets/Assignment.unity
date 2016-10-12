@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44692528, g: 0.4967872, b: 0.5750856, a: 1}
+  m_IndirectSpecularColor: {r: 0.44692492, g: 0.4967869, b: 0.57508546, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -7022,7 +7022,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.1
+  m_Radius: 0.04
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!33 &1592544068
 MeshFilter:
@@ -8807,7 +8807,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61447e03dac129042879ddfe15b98fc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridWorldSize: {x: 50, y: 50}
+  gridWorldSize: {x: 20, y: 20}
   nodeRadius: 0.2
   unwalkableMask:
     serializedVersion: 2
@@ -8819,7 +8819,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1995670607}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 20, y: 0.5, z: 20}
+  m_LocalPosition: {x: 12, y: 0.5, z: 38}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
@@ -8841,6 +8841,13 @@ MonoBehaviour:
   player: {fileID: 481197278}
   textContainer: {fileID: 188437747}
   respawnLocations: {fileID: 1578130789}
+  gridTransform:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 20}
+  - {x: 0, y: 40}
+  - {x: 12, y: 38}
+  - {x: 0, y: 0}
 --- !u!1 &2017522909
 GameObject:
   m_ObjectHideFlags: 0
