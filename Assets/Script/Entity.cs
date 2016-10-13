@@ -11,6 +11,7 @@ public class Entity : MonoBehaviour
     public string waypointPath;
     public int gameLevel;
 
+    float sightSpeedMult = 1.5f;
     Vector3 spawnLoc;
     LevelManager levelManager;
     Vector3[] path;
@@ -132,8 +133,12 @@ public class Entity : MonoBehaviour
                     }
                     currentWaypoint = path[targetIndex];
                 }
-
-                transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, movementSpeed * Time.deltaTime);
+                float calculatedMoveSpeed = movementSpeed;
+                if (followingPlayer)
+                {
+                    calculatedMoveSpeed = movementSpeed * sightSpeedMult;
+                }
+                transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, calculatedMoveSpeed * Time.deltaTime);
             }
             yield return null;
         }
