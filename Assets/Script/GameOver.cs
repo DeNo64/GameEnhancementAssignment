@@ -24,7 +24,7 @@ public class GameOver : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        if (other.tag == "Enemy" && CheckPlayerVisability(player.transform, other.transform) && !caught)
+        if (other.tag == "Enemy" && CheckPlayerVisability(player.transform, other.transform))// && !caught)
         {
             caught = true;
             print("Caught! (Level " + levelManager.currentLevel + ")");
@@ -37,12 +37,12 @@ public class GameOver : MonoBehaviour
     }
 
     IEnumerator RespawnTimer()
-    {
+    {        
+        levelManager.RespawnPlayer();
+        levelManager.ResetEnemys();
         // Commented this out for now because it's easier for testing
         // Has the introduction of the boolean 'caught' fixed this?
         //yield return new WaitForSeconds(respawnTime);   // this wait is breaking the program because if you wait then the coroutine will fire again because the player is still touching the enemy        
-        levelManager.RespawnPlayer();
-        levelManager.ResetEnemys();
         int currentLevel = levelManager.currentLevel;
         levelManager.showPrevious3DText();
         levelManager.OpenLastDoor(currentLevel);

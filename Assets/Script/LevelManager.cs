@@ -38,6 +38,7 @@ public class LevelManager : MonoBehaviour {
     {
         GameObject respawnLoc = respawnLocations.GetChild(currentLevel-1).gameObject;
         player.transform.position = respawnLoc.transform.position;
+        player.transform.rotation = respawnLoc.transform.rotation;
     }
 
     public void showPrevious3DText()

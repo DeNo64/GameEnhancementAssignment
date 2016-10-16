@@ -10,7 +10,7 @@ public class Entity : MonoBehaviour
     public GameObject player;
     public string waypointPath;
     public int gameLevel;
-
+        
     float sightSpeedMult = 1.5f;
     Vector3 spawnLoc;
     LevelManager levelManager;
@@ -19,6 +19,19 @@ public class Entity : MonoBehaviour
     Pathfinding pathFinding;
     Vector3 currentWaypoint;
     float time = 0.0f;
+
+    // finite state machine
+    enum entityAlertState
+    {
+        Calm = 0,
+        Suspicious = 1,
+        Alert = 2
+    }
+    entityAlertState currentState = entityAlertState.Calm;
+    float calmDownTime = 0.5f;
+    Renderer renderer;
+    float SusToCalmTime = 0f;
+    float SusToAlertTime = 0f;
 
     List<Vector3> waypoints = new List<Vector3>();
     bool atWaypoint = false;
@@ -42,6 +55,8 @@ public class Entity : MonoBehaviour
 
         //StopCoroutine("FollowPath");
         //StartCoroutine("FollowPath");
+
+        renderer = GetComponent<Renderer>();
     }
 
     public void ResetEnemy()
@@ -60,58 +75,48 @@ public class Entity : MonoBehaviour
 
     void Update()
     {
-        if (HitPoints <= 0)
-        {
-            Hud.score++;
-            Hud.budget += 10;
-            Destroy(this.gameObject);
-        }
-        if (gameLevel == levelManager.currentLevel)
-        {
-            if (CheckPlayerVisability())
-            {
-                time += Time.deltaTime;
-                currentWaypoint = player.transform.position;
-                if (time > 0.2f)
-                {
-                    path = pathFinding.FindPath(transform.position, currentWaypoint);
-                    if (path == null)
-                    {
-                        throw new System.Exception("Path Was Not Found!");
-                    }
+        CheckFiniteStateMachine();      // done the Brody way :P
 
-                    StopCoroutine("FollowPath");
-                    StartCoroutine("FollowPath");
-                    time = 0.0f;
-                }
-                followingPlayer = true;
-            }
-            else if (atWaypoint || followingPlayer)
-            {
-                if (followingPlayer)
-                {
-                    currentWaypoint = GetClosestWaypoint(player.transform);
-                    followingPlayer = false;
-                }
-                else
-                {
-                    currentWaypoint = waypoints[GetIndexOfWaypoint(currentWaypoint) + 1];
-                }
+        //if (gameLevel == levelManager.currentLevel)
+        //{
+        //    if (CheckPlayerVisability())
+        //    {
+        //        time += Time.deltaTime;
+        //        currentWaypoint = player.transform.position;
+        //        if (time > 0.2f)
+        //        {
+        //            path = pathFinding.FindPath(transform.position, currentWaypoint);
+        //            if (path == null)
+        //            {
+        //                throw new System.Exception("Path Was Not Found!");
+        //            }
+
+        //            StopCoroutine("FollowPath");
+        //            StartCoroutine(JustWait(2));
+        //            time = 0.0f;
+        //        }
+        //        followingPlayer = true;
+        //    }
+        //    else if (atWaypoint)
+        //    {
+        //        if (false)
+        //        {
+        //            currentWaypoint = GetClosestWaypoint(player.transform);
+        //            followingPlayer = false;
+        //        }
+        //        else
+        //        {
+        //            currentWaypoint = waypoints[GetIndexOfWaypoint(currentWaypoint) + 1];
+        //        }
                 
-                //print(GetIndexOfWaypoint(currentWaypoint) + 1);
-                atWaypoint = false;
+        //        //print(GetIndexOfWaypoint(currentWaypoint) + 1);
+        //        atWaypoint = false;
 
-                path = pathFinding.FindPath(transform.position, currentWaypoint);
-                StopCoroutine("FollowPath");
-                StartCoroutine("FollowPath");
-            }
-        }
-    }
-
-    void OnDestroy()
-    {
-        StopCoroutine("FollowPath");
-        GameLogic.entitiesAlive--;
+        //        path = pathFinding.FindPath(transform.position, currentWaypoint);
+        //        StopCoroutine("FollowPath");
+        //        StartCoroutine("FollowPath");
+        //    }
+        //}
     }
 
     IEnumerator FollowPath()
@@ -142,6 +147,13 @@ public class Entity : MonoBehaviour
             }
             yield return null;
         }
+    }
+
+    IEnumerator JustWait(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        StartCoroutine("FollowPath");
+        yield return null;
     }
 
     void OnTriggerEnter(Collider col)
@@ -251,5 +263,87 @@ public class Entity : MonoBehaviour
         }
         else
             return false; */
+    }
+
+    void CheckFiniteStateMachine()
+    {
+        if(currentState == entityAlertState.Calm)
+        {
+            renderer.material.color = Color.blue;
+            if (atWaypoint)
+            {
+                currentWaypoint = waypoints[GetIndexOfWaypoint(currentWaypoint) + 1];
+            
+                //print(GetIndexOfWaypoint(currentWaypoint) + 1);
+                atWaypoint = false;
+
+                path = pathFinding.FindPath(transform.position, currentWaypoint);
+                StopCoroutine("FollowPath");
+                StartCoroutine("FollowPath");
+            }
+
+            if (CheckPlayerVisability())
+            {
+                // play some audio queue or something
+                currentState = entityAlertState.Suspicious;
+            }
+        }
+        else if (currentState == entityAlertState.Suspicious)
+        {
+            renderer.material.color = Color.yellow;
+            StopCoroutine("FollowPath");
+            atWaypoint = true;
+
+            if (CheckPlayerVisability())
+            {
+                SusToCalmTime = 0;
+                SusToAlertTime += Time.deltaTime;
+                if (SusToAlertTime > calmDownTime)
+                {
+                    if (CheckPlayerVisability())
+                    {
+                        currentState = entityAlertState.Alert;
+                        atWaypoint = false;
+                    }
+                    SusToAlertTime = 0.0f;
+                }
+            }
+            else
+            {
+                SusToAlertTime = 0f;
+                SusToCalmTime += Time.deltaTime;
+                if (SusToCalmTime > calmDownTime)
+                {
+                    if (!CheckPlayerVisability())
+                    {
+                        currentState = entityAlertState.Calm;
+                        currentWaypoint = GetClosestWaypoint(transform);
+                    }
+                    SusToCalmTime = 0.0f;
+                }
+            }                                 
+        }
+        else if (currentState == entityAlertState.Alert)
+        {
+            renderer.material.color = Color.red;
+
+            if (CheckPlayerVisability())
+            {
+                currentWaypoint = player.transform.position;
+                path = pathFinding.FindPath(transform.position, currentWaypoint);
+                if (path == null)
+                {
+                    throw new System.Exception("Path Was Not Found!");
+                }
+
+                StopCoroutine("FollowPath");
+                StartCoroutine("FollowPath");
+            }
+
+            if (atWaypoint)
+            {
+                currentState = entityAlertState.Suspicious;
+            }
+        }
     }
 }
