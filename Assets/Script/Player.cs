@@ -5,17 +5,32 @@ public class Player : MonoBehaviour {
     const float MOVESPEED = 4f;
     const float STRAFESPEED = 2f;
     const float ROTSPEED = 200f;
+    const float FORCEMULTI = 3000f;
     Rigidbody player;
+    public bool mouseVisable = false;
+
+    public GameObject inGameMenu;
+    InGameMenu script;
 
     void Start()
     {
         player = GetComponent<Rigidbody>();
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = (false);
+        script = inGameMenu.GetComponent<InGameMenu>();
     }
 
     void Update ()
     {
         Move();
-	}
+        if (!mouseVisable)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        else
+            Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = (mouseVisable);
+    }
 
     void Move()
     {
@@ -27,19 +42,23 @@ public class Player : MonoBehaviour {
 
         if (Input.GetKey(KeyCode.A))
         {
-            player.MovePosition((-transform.right * (STRAFESPEED * Time.deltaTime)) + player.position); // Left
+            player.MovePosition((-transform.right * (STRAFESPEED * Time.deltaTime)) + player.position); // Left            
+            //player.AddForce((-transform.right * (STRAFESPEED * Time.deltaTime * FORCEMULTI)) + player.position);
         }
         if (Input.GetKey(KeyCode.D))
         {
             player.MovePosition((transform.right * (STRAFESPEED * Time.deltaTime)) + player.position); // Right
+            //player.AddForce((transform.right * (STRAFESPEED * Time.deltaTime * FORCEMULTI)) + player.position);
         }
         if (Input.GetKey(KeyCode.W))
         {
             player.MovePosition((transform.forward * (MOVESPEED * Time.deltaTime)) + player.position); // Forward
+            //player.AddForce((transform.forward * (MOVESPEED * FORCEMULTI * Time.deltaTime)) + player.position);
         }
         if (Input.GetKey(KeyCode.S))
         {
             player.MovePosition((-transform.forward * (MOVESPEED * Time.deltaTime)) + player.position); // Backward
+            //player.AddForce((-transform.forward * (MOVESPEED * FORCEMULTI * Time.deltaTime)) + player.position);
         }
 
         //Vector3 eulerRot = new Vector3(0, Input.GetAxis("Mouse X"), 0) * Time.deltaTime * ROTSPEED;
@@ -48,5 +67,11 @@ public class Player : MonoBehaviour {
         //player.MoveRotation(player.rotation * deltaRotation);
         transform.Rotate(new Vector3(0, Input.GetAxis("Mouse X"), 0) * Time.deltaTime * ROTSPEED);
         player.velocity = new Vector3(0f, 0f, 0f);
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            mouseVisable = !mouseVisable;
+            script.ShowMenu(mouseVisable);
+        }
     }
 }

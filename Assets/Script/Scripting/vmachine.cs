@@ -21,7 +21,7 @@ struct rule
 public class vmachine : MonoBehaviour {
 
     public Transform player;
-    public Transform boss;
+    Transform boss;
 
     public const int INFRONT = 0;
     public const int BEHIND = 1;
@@ -41,15 +41,17 @@ public class vmachine : MonoBehaviour {
     int m_numrules;             // number of rules in the rule system
     rule[] m_program;             // the list of rules in the system
 
-    public TextAsset file;
+    //public TextAsset file;
 
     // Use this for initialization
     void Start()
     {
-        m_numrules = countRules(file.name + ".txt");
+        m_numrules = countRules(this.gameObject.name + ".txt");
         m_program = new rule[m_numrules];
 
-        load(file.name + ".txt");
+        //load(file.name + ".txt");
+        load(this.gameObject.name + ".txt");
+        boss = this.gameObject.transform;
         
     }
     void Update()

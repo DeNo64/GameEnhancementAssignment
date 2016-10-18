@@ -3,12 +3,13 @@
 -More levels (How Many? (I'm thinking 6 to 9, with varying lengths. 
 	-The last levels would be about 3-4 times larger than the first ones))
 
-Brody: I believe level3 layout should be changed so that the first left route is the exit route as I believe the first route players will choose will be the correct one!! DONE!!
+(DONE!)Brody: I believe level3 layout should be changed so that the first left route is the exit route as I believe the first route players will choose will be the correct one!! DONE!!
 
--Implement Scripting (Vmachine has been added to project)
+-Implement Scripting (Vmachine has been set up ready for scripts)
 -Move Enemy AI into Finite State Machine (Done! Testing needs to be done)
 -Animations
 -Particle Systems and/or rigid body physics????? 
 	-If the particle system can just be particles falling from a source (like sparks from a broken light) then I think that would be easy
 	-Rigid Body Physics would be easy to implement but I don't know how it would fit into the game.
--In-game menu and (instructions done?)
+-In-game menu (DONE!)
+-Instructions (done?)
