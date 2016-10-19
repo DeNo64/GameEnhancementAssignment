@@ -65,6 +65,7 @@ public class Entity : MonoBehaviour
         transform.position = spawnLoc;
         currentWaypoint = GetClosestWaypoint(transform);
         followingPlayer = false;
+        currentState = entityAlertState.Calm;
     }
 
     public void FindPath()
@@ -166,7 +167,6 @@ public class Entity : MonoBehaviour
         else if (col.gameObject.tag == "Finish")
         {
             Destroy(this.gameObject);
-            Hud.escaped--;
         }
     }
 
@@ -276,6 +276,7 @@ public class Entity : MonoBehaviour
             
                 //print(GetIndexOfWaypoint(currentWaypoint) + 1);
                 atWaypoint = false;
+                followingPlayer = false;
 
                 path = pathFinding.FindPath(transform.position, currentWaypoint);
                 StopCoroutine("FollowPath");
@@ -292,7 +293,6 @@ public class Entity : MonoBehaviour
         {
             renderer.material.color = Color.yellow;
             StopCoroutine("FollowPath");
-            atWaypoint = true;
 
             if (CheckPlayerVisability())
             {
@@ -317,7 +317,11 @@ public class Entity : MonoBehaviour
                     if (!CheckPlayerVisability())
                     {
                         currentState = entityAlertState.Calm;
+
                         currentWaypoint = GetClosestWaypoint(transform);
+                        path = pathFinding.FindPath(transform.position, currentWaypoint);
+                        StopCoroutine("FollowPath");
+                        StartCoroutine("FollowPath");
                     }
                     SusToCalmTime = 0.0f;
                 }
@@ -329,15 +333,21 @@ public class Entity : MonoBehaviour
 
             if (CheckPlayerVisability())
             {
-                currentWaypoint = player.transform.position;
-                path = pathFinding.FindPath(transform.position, currentWaypoint);
-                if (path == null)
+                time += Time.deltaTime;
+                if (time > 0.2f)
                 {
-                    throw new System.Exception("Path Was Not Found!");
-                }
+                    currentWaypoint = player.transform.position;
+                    path = pathFinding.FindPath(transform.position, currentWaypoint);
+                    if (path == null)
+                    {
+                        throw new System.Exception("Path Was Not Found!");
+                    }
+                    followingPlayer = true;
 
-                StopCoroutine("FollowPath");
-                StartCoroutine("FollowPath");
+                    StopCoroutine("FollowPath");
+                    StartCoroutine("FollowPath");
+                    time = 0.0f;
+                }
             }
 
             if (atWaypoint)
