@@ -1,15 +1,12 @@
--Textures
--Models
--More levels (How Many? (I'm thinking 6 to 9, with varying lengths. 
-	-The last levels would be about 3-4 times larger than the first ones))
+-[DONE] Textures
+-[DONE] More levels (How Many? (I'm thinking 6 to 9, with varying lengths. 
+-[DONE] Move Enemy AI into Finite State Machine (Done! Testing needs to be done)
+-[DONE] In-game menu (DONE!)
+-[DONE] Instructions (done?)
 
-(DONE!)Brody: I believe level3 layout should be changed so that the first left route is the exit route as I believe the first route players will choose will be the correct one!! DONE!!
-
--Implement Scripting (Vmachine has been set up ready for scripts)
--Move Enemy AI into Finite State Machine (Done! Testing needs to be done)
+-Models (for Player, Enemies, Keys and some crates or something to stack around the game)
 -Animations
--Particle Systems and/or rigid body physics????? 
+-Implement Scripting (Vmachine has been set up ready for scripts)
+-Particle Systems and/or rigid body physics?
 	-If the particle system can just be particles falling from a source (like sparks from a broken light) then I think that would be easy
 	-Rigid Body Physics would be easy to implement but I don't know how it would fit into the game.
--In-game menu (DONE!)
--Instructions (done?)
