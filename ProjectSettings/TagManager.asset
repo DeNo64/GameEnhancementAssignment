@@ -11,6 +11,7 @@ TagManager:
   - DoorLocked
   - Wall
   - PlayerTagRange
+  - Key
   layers:
   - Default
   - TransparentFX

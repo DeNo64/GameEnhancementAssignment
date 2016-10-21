@@ -41,16 +41,18 @@ public class Entity : MonoBehaviour
     {
         spawnLoc = transform.position;
         levelManager = GameObject.Find("MasterController").GetComponent<LevelManager>();
-        Transform enemyWaypoints = GameObject.Find("EnemyWaypoints/WaypointSet" + waypointPath).transform;
-        for (int i = 0; i < enemyWaypoints.childCount; i++)
-        {
-            waypoints.Add(enemyWaypoints.GetChild(i).position);
-            //print(enemyWaypoints.GetChild(i).name);
-        }
-
-        currentWaypoint = GetClosestWaypoint(transform);
-
         pathFinding = GameObject.Find("MasterController").GetComponent<Pathfinding>();
+        if (waypointPath != "0")
+        {
+            Transform enemyWaypoints = GameObject.Find("EnemyWaypoints/WaypointSet" + waypointPath).transform;
+            for (int i = 0; i < enemyWaypoints.childCount; i++)
+            {
+                waypoints.Add(enemyWaypoints.GetChild(i).position);
+                //print(enemyWaypoints.GetChild(i).name);
+            }
+
+            currentWaypoint = GetClosestWaypoint(transform);
+        }
         //path = pathFinding.FindPath(transform.position, currentWaypoint);
 
         //StopCoroutine("FollowPath");
@@ -63,15 +65,21 @@ public class Entity : MonoBehaviour
     {
         StopCoroutine("FollowPath");
         transform.position = spawnLoc;
-        currentWaypoint = GetClosestWaypoint(transform);
+        if (waypointPath != "0")
+        {
+            currentWaypoint = GetClosestWaypoint(transform);
+        }
         followingPlayer = false;
         currentState = entityAlertState.Calm;
     }
 
     public void FindPath()
     {
-        path = pathFinding.FindPath(transform.position, currentWaypoint);
-        StartCoroutine("FollowPath");
+        if (waypointPath != "0")
+        {
+            path = pathFinding.FindPath(transform.position, currentWaypoint);
+            StartCoroutine("FollowPath");
+        }
     }
 
     void Update()
@@ -128,16 +136,19 @@ public class Entity : MonoBehaviour
         {
             if (gameLevel == levelManager.currentLevel)
             {
-                if (transform.position == currentWaypoint)
+                if (waypointPath != "0")
                 {
-                    targetIndex++;
-                    if (targetIndex >= path.Length)
+                    if (transform.position == currentWaypoint)
                     {
-                        atWaypoint = true;
-                        targetIndex = 0;
-                        yield break;
+                        targetIndex++;
+                        if (targetIndex >= path.Length)
+                        {
+                            atWaypoint = true;
+                            targetIndex = 0;
+                            yield break;
+                        }
+                        currentWaypoint = path[targetIndex];
                     }
-                    currentWaypoint = path[targetIndex];
                 }
                 float calculatedMoveSpeed = movementSpeed;
                 if (followingPlayer)
@@ -153,7 +164,10 @@ public class Entity : MonoBehaviour
     IEnumerator JustWait(float seconds)
     {
         yield return new WaitForSeconds(seconds);
-        StartCoroutine("FollowPath");
+        if (waypointPath != "0")
+        {
+            StartCoroutine("FollowPath");
+        }
         yield return null;
     }
 
@@ -272,15 +286,19 @@ public class Entity : MonoBehaviour
             renderer.material.color = Color.blue;
             if (atWaypoint)
             {
-                currentWaypoint = waypoints[GetIndexOfWaypoint(currentWaypoint) + 1];
+                if (waypointPath != "0")
+                {
+                    currentWaypoint = waypoints[GetIndexOfWaypoint(currentWaypoint) + 1];
+                    path = pathFinding.FindPath(transform.position, currentWaypoint);
+                    StopCoroutine("FollowPath");
+                    StartCoroutine("FollowPath");
+                }
             
                 //print(GetIndexOfWaypoint(currentWaypoint) + 1);
                 atWaypoint = false;
                 followingPlayer = false;
 
-                path = pathFinding.FindPath(transform.position, currentWaypoint);
-                StopCoroutine("FollowPath");
-                StartCoroutine("FollowPath");
+                
             }
 
             if (CheckPlayerVisability())
@@ -318,10 +336,13 @@ public class Entity : MonoBehaviour
                     {
                         currentState = entityAlertState.Calm;
 
-                        currentWaypoint = GetClosestWaypoint(transform);
-                        path = pathFinding.FindPath(transform.position, currentWaypoint);
-                        StopCoroutine("FollowPath");
-                        StartCoroutine("FollowPath");
+                        if (waypointPath != "0")
+                        {
+                            currentWaypoint = GetClosestWaypoint(transform);
+                            path = pathFinding.FindPath(transform.position, currentWaypoint);
+                            StopCoroutine("FollowPath");
+                            StartCoroutine("FollowPath");
+                        }
                     }
                     SusToCalmTime = 0.0f;
                 }
@@ -336,16 +357,16 @@ public class Entity : MonoBehaviour
                 time += Time.deltaTime;
                 if (time > 0.2f)
                 {
-                    currentWaypoint = player.transform.position;
-                    path = pathFinding.FindPath(transform.position, currentWaypoint);
-                    if (path == null)
-                    {
-                        throw new System.Exception("Path Was Not Found!");
-                    }
+                        currentWaypoint = player.transform.position;
+                        path = pathFinding.FindPath(transform.position, currentWaypoint);
+                        if (path == null)
+                        {
+                            throw new System.Exception("Path Was Not Found!");
+                        }
+                        StopCoroutine("FollowPath");
+                        StartCoroutine("FollowPath");
+                    
                     followingPlayer = true;
-
-                    StopCoroutine("FollowPath");
-                    StartCoroutine("FollowPath");
                     time = 0.0f;
                 }
             }

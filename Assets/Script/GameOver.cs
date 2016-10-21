@@ -8,7 +8,7 @@ public class GameOver : MonoBehaviour
     LevelManager levelManager;
     int respawnTime = 5; // Seconds
     bool caught = false;
-    int timesCaught = 0;
+    public int timesCaught = 0;
 
     // Use this for initialization
     void Start()
@@ -40,6 +40,7 @@ public class GameOver : MonoBehaviour
     {        
         levelManager.RespawnPlayer();
         levelManager.ResetEnemys();
+        levelManager.ResetKeys();
         // Commented this out for now because it's easier for testing
         // Has the introduction of the boolean 'caught' fixed this?
         //yield return new WaitForSeconds(respawnTime);   // this wait is breaking the program because if you wait then the coroutine will fire again because the player is still touching the enemy        
