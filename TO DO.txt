@@ -1,8 +1,8 @@
 -[DONE] Textures
 -[DONE] More levels (How Many? (I'm thinking 6 to 9, with varying lengths. 
--[DONE] Move Enemy AI into Finite State Machine (Done! Testing needs to be done)
--[DONE] In-game menu (DONE!)
--[DONE] Instructions (done?)
+-[DONE] Move Enemy AI into Finite State Machine (Testing needs to be done)
+-[DONE] In-game menu
+-[DONE] Instructions
 
 -Models (for Player, Enemies, Keys and some crates or something to stack around the game)
 -Animations
