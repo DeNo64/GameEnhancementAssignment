@@ -5,11 +5,14 @@ using System.Collections.Generic;
 
 public class Entity : MonoBehaviour
 {
+    internal Animator animator;
+
     public int HitPoints = 10;
     public float movementSpeed = 0.02f;
     public GameObject player;
     public string waypointPath;
     public int gameLevel;
+    public bool idler;
         
     float sightSpeedMult = 1.5f;
     Vector3 spawnLoc;
@@ -59,6 +62,16 @@ public class Entity : MonoBehaviour
         //StartCoroutine("FollowPath");
 
         renderer = GetComponent<Renderer>();
+        animator = GetComponent<Animator>();
+    }
+
+    void FixedUpdate()
+    {
+        if (animator != null)
+        {
+            animator.SetInteger("State", (int)currentState);
+            animator.SetBool("Idler", idler);
+        }
     }
 
     public void ResetEnemy()
@@ -76,7 +89,7 @@ public class Entity : MonoBehaviour
     public void FindPath()
     {
         if (waypointPath != "0")
-        {
+        { 
             path = pathFinding.FindPath(transform.position, currentWaypoint);
             StartCoroutine("FollowPath");
         }
@@ -84,6 +97,7 @@ public class Entity : MonoBehaviour
 
     void Update()
     {
+        //Debug.Log(currentState + " " + gameLevel);
         CheckFiniteStateMachine();      // done the Brody way :P
 
         //if (gameLevel == levelManager.currentLevel)
@@ -155,8 +169,11 @@ public class Entity : MonoBehaviour
                 {
                     calculatedMoveSpeed = movementSpeed * sightSpeedMult;
                 }
+                currentWaypoint = new Vector3(currentWaypoint.x, 0, currentWaypoint.z);
                 transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, calculatedMoveSpeed * Time.deltaTime);
             }
+
+            transform.LookAt(currentWaypoint);
             yield return null;
         }
     }
@@ -238,8 +255,11 @@ public class Entity : MonoBehaviour
     bool CheckPlayerVisability()
     {
         RaycastHit[] hits;
-        var rayDirection = player.transform.position - transform.position;
-        hits = Physics.RaycastAll(transform.position, rayDirection, Vector3.Distance(player.transform.position, transform.position));
+        //var rayDirection = player.transform.position - transform.position;
+        Vector3 thisPosition = new Vector3(transform.position.x, 0, transform.position.z);
+        Vector3 rayDirection = player.transform.position - thisPosition;
+        hits = Physics.RaycastAll(thisPosition, rayDirection, Vector3.Distance(player.transform.position, thisPosition));
+        Debug.DrawRay(thisPosition, rayDirection, Color.green);
         if (hits.Length > 0) 
         {
             float playerDist = 1001f;
@@ -283,7 +303,7 @@ public class Entity : MonoBehaviour
     {
         if(currentState == entityAlertState.Calm)
         {
-            renderer.material.color = Color.blue;
+            //renderer.material.color = Color.blue;
             if (atWaypoint)
             {
                 if (waypointPath != "0")
@@ -309,7 +329,7 @@ public class Entity : MonoBehaviour
         }
         else if (currentState == entityAlertState.Suspicious)
         {
-            renderer.material.color = Color.yellow;
+            //renderer.material.color = Color.yellow;
             StopCoroutine("FollowPath");
 
             if (CheckPlayerVisability())
@@ -322,6 +342,15 @@ public class Entity : MonoBehaviour
                     {
                         currentState = entityAlertState.Alert;
                         atWaypoint = false;
+
+                        currentWaypoint = player.transform.position;
+                        path = pathFinding.FindPath(transform.position, currentWaypoint);
+                        if (path == null)
+                        {
+                            throw new System.Exception("Path Was Not Found!");
+                        }
+                        StopCoroutine("FollowPath");
+                        StartCoroutine("FollowPath");
                     }
                     SusToAlertTime = 0.0f;
                 }
@@ -350,7 +379,7 @@ public class Entity : MonoBehaviour
         }
         else if (currentState == entityAlertState.Alert)
         {
-            renderer.material.color = Color.red;
+            //renderer.material.color = Color.red;
 
             if (CheckPlayerVisability())
             {
@@ -370,8 +399,8 @@ public class Entity : MonoBehaviour
                     time = 0.0f;
                 }
             }
-
-            if (atWaypoint)
+            
+            else if (atWaypoint)
             {
                 currentState = entityAlertState.Suspicious;
             }

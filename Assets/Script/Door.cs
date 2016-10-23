@@ -71,9 +71,11 @@ public class Door : MonoBehaviour {
                     Entity enemyScript = enemies.transform.GetChild(i).GetComponent<Entity>();
                     if (enemyScript.gameLevel == levelNum)
                     {
+                        enemyScript.enabled = true;
                         enemyScript.ResetEnemy();
                         enemyScript.FindPath();
                     }
+                    else enemyScript.enabled = false;
                 }
             }
             else if (levelManager.currentKeys == keysRequired)

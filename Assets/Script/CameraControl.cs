@@ -28,10 +28,10 @@ public class CameraControl : MonoBehaviour
 
     void updateCam()
     {
-        transform.position = player.transform.position;
+        transform.position = player.transform.position/15;
         transform.rotation = player.transform.rotation;
-        transform.Translate(Vector3.back * camLocBehind);
-        transform.Translate(Vector3.up * camLocAbove);
+        transform.Translate(Vector3.back * camLocBehind/15);
+        transform.Translate(Vector3.up * camLocAbove/15);
         transform.LookAt(player.transform);
     }
 }

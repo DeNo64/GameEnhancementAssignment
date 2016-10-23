@@ -11,6 +11,8 @@ public class Player : MonoBehaviour {
 
     public GameObject inGameMenu;
     InGameMenu script;
+    
+    internal Animator animator;
 
     void Start()
     {
@@ -18,6 +20,20 @@ public class Player : MonoBehaviour {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = (false);
         script = inGameMenu.GetComponent<InGameMenu>();
+
+        animator = GetComponent<Animator>();
+    }
+
+    void FixedUpdate()
+    {
+        if (animator != null)
+        {
+            animator.SetBool("WPushed", Input.GetKey(KeyCode.W));
+            animator.SetBool("SPushed", Input.GetKey(KeyCode.S));
+
+            animator.SetBool("TPushed", Input.GetKey(KeyCode.T));
+            animator.SetBool("YPushed", Input.GetKey(KeyCode.Y));
+        }
     }
 
     void Update ()
