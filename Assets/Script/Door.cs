@@ -26,10 +26,7 @@ public class Door : MonoBehaviour {
         levelManager = GameObject.Find("MasterController").GetComponent<LevelManager>();
         if (keysRequired != 0)
         {
-            renderer.material.color = new Color(0f, 0.5f, 1f);
-            //currentColor = new Color(0f, 0.5f, 1f);
-            doorCollider.isTrigger = false;
-            doorOpen = false;
+            LockDoor();
         }
     }
 
@@ -37,11 +34,9 @@ public class Door : MonoBehaviour {
     void Update()
     {
         closeTriggered = closeTrigger.GetComponent<IsTriggered>().triggered;
-        if (keysRequired != 0) { 
-            if (levelManager.currentLevel == levelNum && levelManager.currentKeys == keysRequired && !doorOpen)
-            {
-                OpenDoor();
-            }
+        if (!startDoor && levelManager.currentLevel == levelNum && levelManager.currentKeys == keysRequired && !doorOpen)
+        {
+            OpenDoor();
         }
     }
 
@@ -94,15 +89,20 @@ public class Door : MonoBehaviour {
     {
         doorCollider.isTrigger = true;
         renderer.material.color = Color.green;
-        //currentColor = Color.green;
         doorOpen = true;
     }
 
     public void CloseDoor()
     {
         doorCollider.isTrigger = false;
-        renderer.material.color = Color.red; // should this be changed to be the same colour as the walls. To 'hide' the door?
-        //currentColor = Color.red;
+        renderer.material.color = Color.red;
+        doorOpen = false;
+    }
+
+    public void LockDoor()
+    {
+        renderer.material.color = new Color(0f, 0.5f, 1f);
+        doorCollider.isTrigger = false;
         doorOpen = false;
     }
 }

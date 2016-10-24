@@ -3,10 +3,9 @@
 -[DONE] Move Enemy AI into Finite State Machine (Testing needs to be done)
 -[DONE] In-game menu
 -[DONE] Instructions
+-[DONE] Models (for Player, Enemies, Keys and some crates or something to stack around the game)
+-[DONE] Animations
+-[DONE?] Particle Systems and/or rigid body physics?
 
--Models (for Player, Enemies, Keys and some crates or something to stack around the game)
--Animations
 -Implement Scripting (Vmachine has been set up ready for scripts)
--Particle Systems and/or rigid body physics?
-	-If the particle system can just be particles falling from a source (like sparks from a broken light) then I think that would be easy
-	-Rigid Body Physics would be easy to implement but I don't know how it would fit into the game.
+-UI text showing remaining number of keys to collect (door.keysRequired - levelManager.currentKeys)

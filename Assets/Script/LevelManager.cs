@@ -55,7 +55,7 @@ public class LevelManager : MonoBehaviour {
     public void OpenLastDoor(int lastLevel)
     {
         GameObject.Find("StartDoor" + (lastLevel)).GetComponent<Door>().OpenDoor();
-        GameObject.Find("EndDoor" + (lastLevel)).GetComponent<Door>().OpenDoor();  // If you're in the door when the enemy catches you the door breaks
+        GameObject.Find("EndDoor" + (lastLevel)).GetComponent<Door>().LockDoor();
     }
 
     public void RespawnPlayer()

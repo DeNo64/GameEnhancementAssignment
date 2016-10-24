@@ -254,30 +254,35 @@ public class Entity : MonoBehaviour
 
     bool CheckPlayerVisability()
     {
-        RaycastHit[] hits;
-        //var rayDirection = player.transform.position - transform.position;
-        Vector3 thisPosition = new Vector3(transform.position.x, 0, transform.position.z);
-        Vector3 rayDirection = player.transform.position - thisPosition;
-        hits = Physics.RaycastAll(thisPosition, rayDirection, Vector3.Distance(player.transform.position, thisPosition));
-        Debug.DrawRay(thisPosition, rayDirection, Color.green);
-        if (hits.Length > 0) 
+        if (gameLevel == levelManager.currentLevel)
         {
-            float playerDist = 1001f;
-            float closest = 1000f;
-            for (int i = 0; i < hits.Length; i++)
+            RaycastHit[] hits;
+            //var rayDirection = player.transform.position - transform.position;
+            Vector3 thisPosition = new Vector3(transform.position.x, 0, transform.position.z);
+            Vector3 rayDirection = player.transform.position - thisPosition;
+            hits = Physics.RaycastAll(thisPosition, rayDirection, Vector3.Distance(player.transform.position, thisPosition));
+            Debug.DrawRay(thisPosition, rayDirection, Color.green);
+            if (hits.Length > 0)
             {
-                if (hits[i].collider.tag == "Player")
+                float playerDist = 1001f;
+                float closest = 1000f;
+                for (int i = 0; i < hits.Length; i++)
                 {
-                    playerDist = hits[i].distance;
+                    if (hits[i].collider.tag == "Player")
+                    {
+                        playerDist = hits[i].distance;
+                    }
+                    if (hits[i].distance < closest && hits[i].collider.tag != "PlayerTagRange" && hits[i].collider.tag != "IgnoreRay")
+                    {
+                        closest = hits[i].distance;
+                    }
                 }
-                if (hits[i].distance < closest && hits[i].collider.tag != "PlayerTagRange")
+                if (playerDist == closest)
                 {
-                    closest = hits[i].distance;
+                    Debug.DrawRay(thisPosition, rayDirection, Color.red);
+                    return true;
                 }
-            }
-            if (playerDist == closest)
-            {
-                return true;
+
             }
         }
         return false;
