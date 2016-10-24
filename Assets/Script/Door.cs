@@ -76,7 +76,7 @@ public class Door : MonoBehaviour {
             }
             else if (levelManager.currentKeys == keysRequired)
             {
-                levelManager.update3DText(false, 0);
+                levelManager.update3DText(false, levelNum);
                 levelManager.currentLevel = 0; // Intermediate level to pause all AI
                 levelManager.currentKeys = 0;
                 levelManager.ClearHud();

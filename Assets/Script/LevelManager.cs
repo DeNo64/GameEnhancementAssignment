@@ -99,11 +99,11 @@ public class LevelManager : MonoBehaviour {
         }
         else
         {
-            GameObject.Find("Level" + (currentLevel + 1) + "Text").GetComponent<MeshRenderer>().enabled = true;
+            GameObject.Find("Level" + (roomNum + 1) + "Text").GetComponent<MeshRenderer>().enabled = true;
             if ((currentLevel + 1) == 9)
             {
                 captureText.text = "You were caught " + gameOverScript.timesCaught.ToString() + " times.";
-                timerText.text = "You took " + gameTimer.ToString() + " seconds to beat the game";
+                timerText.text = "You took " + Mathf.Floor(gameTimer /60f) + " minutes and " + Mathf.Floor((gameTimer/60-Mathf.Floor(gameTimer / 60))*60) + " seconds to beat the game";
                 GameObject.Find("CaptureCountText").GetComponent<MeshRenderer>().enabled = true;
                 GameObject.Find("TimeCountText").GetComponent<MeshRenderer>().enabled = true;
             }
