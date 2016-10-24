@@ -7,5 +7,4 @@
 -[DONE] Animations
 -[DONE?] Particle Systems and/or rigid body physics?
 -[DONE] Implement Scripting
-
--UI text showing remaining number of keys to collect (door.keysRequired - levelManager.currentKeys)
+-[DONE] UI text showing remaining number of keys to collect (door.keysRequired - levelManager.currentKeys)
