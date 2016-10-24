@@ -32,7 +32,7 @@ public class Key : MonoBehaviour {
             levelManager.currentKeys++;
             collected = true;
             //renderer.enabled = false;
-            collider.enabled = false;
+            //collider.enabled = false;
             this.gameObject.SetActive(false);
         }
     }
@@ -41,7 +41,7 @@ public class Key : MonoBehaviour {
     {
         collected = false;
         //renderer.enabled = true;
-        collider.enabled = true;
+        //collider.enabled = true;
         this.gameObject.SetActive(true);
     }
 }

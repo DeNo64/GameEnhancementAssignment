@@ -109,7 +109,7 @@ namespace UnityStandardAssets.Cameras
                                            m_CurrentDist > targetDist ? clipMoveTime : returnTime);
             m_CurrentDist = Mathf.Clamp(m_CurrentDist, closestDistance, m_OriginalDist);
             m_Cam.localPosition = -Vector3.forward * (m_CurrentDist - 0.5f);
-            m_Cam.localPosition = new Vector3(m_Cam.localPosition.x, 2, m_Cam.localPosition.z);
+            m_Cam.localPosition = new Vector3(m_Cam.localPosition.x, 3f, m_Cam.localPosition.z);
         }
 
 

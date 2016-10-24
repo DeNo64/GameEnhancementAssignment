@@ -60,6 +60,7 @@ public class Door : MonoBehaviour {
                 levelManager.update3DText(true, levelNum);
                 levelManager.currentLevel = levelNum;
                 levelManager.translateGrid();
+                levelManager.ResetHud(levelNum);
                 GameObject enemies = GameObject.Find("Enemys");
                 for (int i = 0; i < enemies.transform.childCount; i++)
                 {
@@ -78,6 +79,7 @@ public class Door : MonoBehaviour {
                 levelManager.update3DText(false, 0);
                 levelManager.currentLevel = 0; // Intermediate level to pause all AI
                 levelManager.currentKeys = 0;
+                levelManager.ClearHud();
             }
         } else if (other.tag == "Player") {
             renderer.material.color = Color.green;

@@ -30,6 +30,8 @@ public class Player : MonoBehaviour {
         {
             animator.SetBool("WPushed", Input.GetKey(KeyCode.W));
             animator.SetBool("SPushed", Input.GetKey(KeyCode.S));
+            animator.SetBool("APushed", Input.GetKey(KeyCode.A));
+            animator.SetBool("DPushed", Input.GetKey(KeyCode.D));
 
             animator.SetBool("TPushed", Input.GetKey(KeyCode.T));
             animator.SetBool("YPushed", Input.GetKey(KeyCode.Y));
@@ -38,10 +40,15 @@ public class Player : MonoBehaviour {
 
     void Update ()
     {
-        Move();
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            mouseVisable = !mouseVisable;
+            script.ShowMenu(mouseVisable);
+        }
         if (!mouseVisable)
         {
             Cursor.lockState = CursorLockMode.Locked;
+            Move();
         }
         else
             Cursor.lockState = CursorLockMode.Confined;
@@ -82,12 +89,6 @@ public class Player : MonoBehaviour {
 
         //player.MoveRotation(player.rotation * deltaRotation);
         transform.Rotate(new Vector3(0, Input.GetAxis("Mouse X"), 0) * Time.deltaTime * ROTSPEED);
-        player.velocity = new Vector3(0f, 0f, 0f);
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            mouseVisable = !mouseVisable;
-            script.ShowMenu(mouseVisable);
-        }
+        player.velocity = new Vector3(0f, 0f, 0f);        
     }
 }

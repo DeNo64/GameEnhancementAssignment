@@ -12,6 +12,8 @@ public class LevelManager : MonoBehaviour {
     public Transform respawnLocations;
     public Vector2[] gridTransform;
     public GameObject gameOverObject;
+    public GameObject threeDHud;
+    public GameObject doors;
 
     public TextMesh captureText;
     public TextMesh timerText;
@@ -20,13 +22,22 @@ public class LevelManager : MonoBehaviour {
 
     float gameTimer;
     GameOver gameOverScript;
+    int[] keysRequired;
 
     // Use this for initialization
     void Start () {
         gameTimer = 0.0f;
         enemys = GameObject.FindGameObjectsWithTag("Enemy");
         keys = GameObject.FindGameObjectsWithTag("Key");
+        
         gameOverScript = gameOverObject.GetComponent<GameOver>();
+
+        keysRequired = new int[doors.transform.childCount];
+        // set the required keys to exit doors
+        for (int i = 0; i < doors.transform.childCount; i++)
+        {
+            keysRequired[i] = doors.transform.GetChild(i).FindChild("EndDoor" + (i+1)).GetComponent<Door>().keysRequired;
+        }
     }
 	
 	// Update is called once per frame
@@ -50,6 +61,16 @@ public class LevelManager : MonoBehaviour {
         {
             key.GetComponent<Key>().ResetKey();
         }
+    }
+
+    public void ClearHud()
+    {
+        threeDHud.GetComponent<HUD_Keys>().clearKeys();
+    }
+
+    public void ResetHud(int currentLevel)
+    {
+        threeDHud.GetComponent<HUD_Keys>().resetKeys(keysRequired[currentLevel-1]);
     }
 
     public void OpenLastDoor(int lastLevel)

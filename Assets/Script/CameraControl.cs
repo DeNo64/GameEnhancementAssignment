@@ -3,7 +3,6 @@ using System.Collections;
 
 public class CameraControl : MonoBehaviour
 {
-
     public GameObject player;
     public float camLocBehind;
     public float camLocAbove;
