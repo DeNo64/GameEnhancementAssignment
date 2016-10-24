@@ -6,6 +6,6 @@
 -[DONE] Models (for Player, Enemies, Keys and some crates or something to stack around the game)
 -[DONE] Animations
 -[DONE?] Particle Systems and/or rigid body physics?
+-[DONE] Implement Scripting
 
--Implement Scripting (Vmachine has been set up ready for scripts)
 -UI text showing remaining number of keys to collect (door.keysRequired - levelManager.currentKeys)

@@ -7,13 +7,16 @@ public class Entity : MonoBehaviour
 {
     internal Animator animator;
 
+    public const float DEFAULTSPEED = 3.5f;
+
     public int HitPoints = 10;
-    public float movementSpeed = 0.02f;
+    public float movementSpeed = DEFAULTSPEED;
     public GameObject player;
     public string waypointPath;
     public int gameLevel;
     public bool idler;
-        
+    public bool followingPlayer = false;
+
     float sightSpeedMult = 1.5f;
     Vector3 spawnLoc;
     LevelManager levelManager;
@@ -38,7 +41,6 @@ public class Entity : MonoBehaviour
 
     List<Vector3> waypoints = new List<Vector3>();
     bool atWaypoint = false;
-    bool followingPlayer = false;
 
     void Start()
     {
@@ -165,10 +167,10 @@ public class Entity : MonoBehaviour
                     }
                 }
                 float calculatedMoveSpeed = movementSpeed;
-                if (followingPlayer)
-                {
-                    calculatedMoveSpeed = movementSpeed * sightSpeedMult;
-                }
+                //if (followingPlayer)
+                //{
+                //    calculatedMoveSpeed = movementSpeed * sightSpeedMult;
+                //}
                 currentWaypoint = new Vector3(currentWaypoint.x, 0, currentWaypoint.z);
                 transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, calculatedMoveSpeed * Time.deltaTime);
             }

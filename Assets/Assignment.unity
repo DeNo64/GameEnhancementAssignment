@@ -6124,6 +6124,7 @@ MonoBehaviour:
   waypointPath: 2_1
   gameLevel: 2
   idler: 0
+  followingPlayer: 0
 --- !u!136 &185146672
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6152,6 +6153,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 84
   m_CollisionDetection: 0
+--- !u!114 &185146674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 185146670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4a1e2018496b7a41aa86dcf754fcf74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 2052703840}
 --- !u!1 &185720938
 GameObject:
   m_ObjectHideFlags: 0
@@ -10395,6 +10408,7 @@ MonoBehaviour:
   waypointPath: 0
   gameLevel: 7
   idler: 1
+  followingPlayer: 0
 --- !u!136 &325534745
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -10423,6 +10437,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 84
   m_CollisionDetection: 0
+--- !u!114 &325534747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 325534743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4a1e2018496b7a41aa86dcf754fcf74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 2052703840}
 --- !u!1 &330684588
 GameObject:
   m_ObjectHideFlags: 0
@@ -16217,6 +16243,7 @@ MonoBehaviour:
   waypointPath: 0
   gameLevel: 8
   idler: 1
+  followingPlayer: 0
 --- !u!136 &573360259
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -16245,6 +16272,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 84
   m_CollisionDetection: 0
+--- !u!114 &573360261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 573360257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4a1e2018496b7a41aa86dcf754fcf74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 2052703840}
 --- !u!1 &573448514
 GameObject:
   m_ObjectHideFlags: 0
@@ -19029,6 +19068,7 @@ MonoBehaviour:
   waypointPath: 1_1
   gameLevel: 1
   idler: 0
+  followingPlayer: 0
 --- !u!136 &639113268
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -19057,6 +19097,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 84
   m_CollisionDetection: 0
+--- !u!114 &639113270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 639113265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4a1e2018496b7a41aa86dcf754fcf74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 2052703840}
 --- !u!1 &650808100 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100314, guid: 2663478074d0ee945b76827fdbfe4ceb, type: 3}
@@ -24280,6 +24332,7 @@ MonoBehaviour:
   waypointPath: 8_1
   gameLevel: 8
   idler: 0
+  followingPlayer: 0
 --- !u!136 &735656276
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -24308,6 +24361,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 84
   m_CollisionDetection: 0
+--- !u!114 &735656278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 735656274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4a1e2018496b7a41aa86dcf754fcf74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 2052703840}
 --- !u!1 &735919939
 GameObject:
   m_ObjectHideFlags: 0
@@ -30019,6 +30084,7 @@ MonoBehaviour:
   waypointPath: 6_1
   gameLevel: 6
   idler: 0
+  followingPlayer: 0
 --- !u!136 &901622058
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -30047,6 +30113,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 84
   m_CollisionDetection: 0
+--- !u!114 &901622060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 901622056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4a1e2018496b7a41aa86dcf754fcf74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 2052703840}
 --- !u!1 &903643973
 GameObject:
   m_ObjectHideFlags: 0
@@ -42563,6 +42641,7 @@ MonoBehaviour:
   waypointPath: 5_2
   gameLevel: 5
   idler: 0
+  followingPlayer: 0
 --- !u!136 &1299835072
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -42591,6 +42670,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 84
   m_CollisionDetection: 0
+--- !u!114 &1299835074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1299835070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4a1e2018496b7a41aa86dcf754fcf74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 2052703840}
 --- !u!1 &1308935019 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100350, guid: 2663478074d0ee945b76827fdbfe4ceb, type: 3}
@@ -45612,6 +45703,7 @@ MonoBehaviour:
   waypointPath: 4_1
   gameLevel: 4
   idler: 0
+  followingPlayer: 0
 --- !u!136 &1394961147
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -45640,6 +45732,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 84
   m_CollisionDetection: 0
+--- !u!114 &1394961149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1394961145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4a1e2018496b7a41aa86dcf754fcf74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 2052703840}
 --- !u!1 &1395076172
 GameObject:
   m_ObjectHideFlags: 0
@@ -46918,6 +47022,7 @@ MonoBehaviour:
   waypointPath: 0
   gameLevel: 7
   idler: 1
+  followingPlayer: 0
 --- !u!136 &1472989498
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -46946,6 +47051,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 84
   m_CollisionDetection: 0
+--- !u!114 &1472989500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1472989496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4a1e2018496b7a41aa86dcf754fcf74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 2052703840}
 --- !u!1 &1474471112 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100278, guid: 2663478074d0ee945b76827fdbfe4ceb, type: 3}
@@ -54235,6 +54352,7 @@ MonoBehaviour:
   waypointPath: 5_1
   gameLevel: 5
   idler: 0
+  followingPlayer: 0
 --- !u!136 &1687636718
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -54263,6 +54381,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 84
   m_CollisionDetection: 0
+--- !u!114 &1687636720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1687636716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4a1e2018496b7a41aa86dcf754fcf74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 2052703840}
 --- !u!1 &1688827074 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100024, guid: 2663478074d0ee945b76827fdbfe4ceb, type: 3}
@@ -55869,6 +55999,7 @@ MonoBehaviour:
   waypointPath: 0
   gameLevel: 7
   idler: 1
+  followingPlayer: 0
 --- !u!136 &1793215450
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -55897,6 +56028,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 84
   m_CollisionDetection: 0
+--- !u!114 &1793215452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1793215448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4a1e2018496b7a41aa86dcf754fcf74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 2052703840}
 --- !u!1 &1795833804
 GameObject:
   m_ObjectHideFlags: 0
@@ -57075,7 +57218,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1921798382
 Transform:
   m_ObjectHideFlags: 0
@@ -61453,6 +61596,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 52fce426132f1df45bebb4d7f3471a55, type: 2}
       propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 65000010412528496, guid: 52fce426132f1df45bebb4d7f3471a55,
+        type: 2}
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

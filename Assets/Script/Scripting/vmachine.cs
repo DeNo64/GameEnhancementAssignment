@@ -35,22 +35,41 @@ public class vmachine : MonoBehaviour {
     public const int GREATER = 9;
     public const int SMALLER = 10;
     public const int EQUAL = 11;
+    public const int FOLLOWING = 12;
+    public const int NOTFOLLOWING = 13;
+    public const int SPEED = 14;
     public const int WRONG_OPCODE = -1;
+
+    readonly string[] defaultFile = { "defrule", "following", "=>", "speed 5.25", "defrule", "notfollowing", "=>", "speed 3.5" };
 
     int m_pc;                   // program counter
     int m_numrules;             // number of rules in the rule system
     rule[] m_program;             // the list of rules in the system
 
     //public TextAsset file;
+    string fileName;
+    string directory;
 
     // Use this for initialization
     void Start()
     {
-        m_numrules = countRules(this.gameObject.name + ".txt");
+        directory = "EnemyScripts/";
+        fileName = "EnemyScripts/" + this.gameObject.name + ".txt"; 
+        if(!Directory.Exists(directory))
+        {
+            Directory.CreateDirectory(directory);
+        }
+        if (!File.Exists(fileName))
+        {            
+            File.CreateText(fileName).Close();            
+            File.WriteAllLines(fileName, defaultFile);
+        }
+
+        m_numrules = countRules(fileName);
         m_program = new rule[m_numrules];
 
         //load(file.name + ".txt");
-        load(this.gameObject.name + ".txt");
+        load(fileName);
         boss = this.gameObject.transform;
         
     }
@@ -62,8 +81,8 @@ public class vmachine : MonoBehaviour {
     void load(string filename) // load rules from a script file
     {
         string line;
-
-        StreamReader reader = new StreamReader(Application.dataPath + "/" + filename, Encoding.Default);
+                
+        StreamReader reader = new StreamReader(filename, Encoding.Default);
         
         line = reader.ReadLine();
         int i = 0;
@@ -101,6 +120,16 @@ public class vmachine : MonoBehaviour {
                         f.param = null;
                         m_program[i].condition.Add(f);
                         break;
+                    case FOLLOWING:
+                        f.operation = null;
+                        f.param = null;
+                        m_program[i].condition.Add(f);
+                        break;
+                    case NOTFOLLOWING:
+                        f.operation = null;
+                        f.param = null;
+                        m_program[i].condition.Add(f);
+                        break;
                 }
                 line = reader.ReadLine();
             }
@@ -127,10 +156,23 @@ public class vmachine : MonoBehaviour {
                         f.param = null;
                         m_program[i].action.Add(f);
                         break;
+                    case SPEED:
+                        f.operation = null;
+                        f.param = float.Parse(words[1]);
+                        m_program[i].action.Add(f);
+                        break;
                 }
                 line = reader.ReadLine();
             }
             i++;
+        }
+
+        reader.Close();
+
+        if(m_program.Length == 0)
+        {
+            File.WriteAllLines(filename, defaultFile);
+            Start();
         }
     }
 
@@ -141,6 +183,11 @@ public class vmachine : MonoBehaviour {
         while ((!end) && (!valid(m_program[m_pc])))
         {
             m_pc++;
+            if (m_pc >= m_program.Length)
+            {
+                end = true;
+                m_pc--;
+            }
         }
 
         if(valid(m_program[m_pc]))
@@ -156,40 +203,46 @@ public class vmachine : MonoBehaviour {
         {
             if(fact.operation == WRONG_OPCODE || fact.opcode == WRONG_OPCODE)
             { return false; }
-                switch (fact.opcode)
-                {
-                    case ANGLE:
-                        // determine angle to the player
-                        float angle = Mathf.Acos(Vector3.Dot(player.transform.position.normalized, boss.transform.position.normalized));
-                        if ((fact.operation == GREATER) && (angle < fact.param))
-                        { return false; }
-                        if ((fact.operation == SMALLER) && (angle > fact.param))
-                        { return false; }
-                        if ((fact.operation == EQUAL) && (angle != fact.param))
-                        { return false; }
-                        break;
-                    case DISTANCE:
-                        float distance = Mathf.Sqrt(Mathf.Pow(player.position.x - boss.position.x, 2)+ Mathf.Pow(player.position.z - boss.transform.position.z, 2));
-                        if((fact.operation == GREATER) && (distance < fact.param))
-                        { return false; }
-                        if ((fact.operation == SMALLER) && (distance > fact.param))
-                        { return false; }
-                        if ((fact.operation == EQUAL) && (distance != fact.param))
-                        { return false; }
-                        break;
-                    case INFRONT:
-                        Vector3 IlocalPos = boss.InverseTransformPoint(player.position);
-                        if(IlocalPos.x > 0.0)
-                        { return false; }
-                        break;
-                    case BEHIND:
-                        Vector3 BlocalPos = boss.InverseTransformPoint(player.position);
-                        if (BlocalPos.x < 0.0)
-                        { return false; }
+            switch (fact.opcode)
+            {
+                case ANGLE:
+                    // determine angle to the player
+                    float angle = Mathf.Acos(Vector3.Dot(player.transform.position.normalized, boss.transform.position.normalized));
+                    if ((fact.operation == GREATER) && (angle < fact.param))
+                    { return false; }
+                    if ((fact.operation == SMALLER) && (angle > fact.param))
+                    { return false; }
+                    if ((fact.operation == EQUAL) && (angle != fact.param))
+                    { return false; }
                     break;
-                }
+                case DISTANCE:
+                    float distance = Mathf.Sqrt(Mathf.Pow(player.position.x - boss.position.x, 2)+ Mathf.Pow(player.position.z - boss.transform.position.z, 2));
+                    if((fact.operation == GREATER) && (distance < fact.param))
+                    { return false; }
+                    if ((fact.operation == SMALLER) && (distance > fact.param))
+                    { return false; }
+                    if ((fact.operation == EQUAL) && (distance != fact.param))
+                    { return false; }
+                    break;
+                case INFRONT:
+                    Vector3 IlocalPos = boss.InverseTransformPoint(player.position);
+                    if(IlocalPos.x > 0.0)
+                    { return false; }
+                    break;
+                case BEHIND:
+                    Vector3 BlocalPos = boss.InverseTransformPoint(player.position);
+                    if (BlocalPos.x < 0.0)
+                    { return false; }
+                    break;
+                case FOLLOWING:
+                    { return boss.GetComponent<Entity>().followingPlayer; }
+                    break;
+                case NOTFOLLOWING:
+                    { return !boss.GetComponent<Entity>().followingPlayer; }
+                    break;
+            }
         };
-        return true;
+        return false;
     }
 
     void run_action(rule r)
@@ -206,8 +259,8 @@ public class vmachine : MonoBehaviour {
                                                          0,
                                                          fact.param.Value * Mathf.Sin(boss.eulerAngles.y)));
                     break;
-                case SHOOT:
-                    //boss.GetComponent<Boss>().boxWallOnPlayer();
+                case SPEED:
+                    boss.GetComponent<Entity>().movementSpeed = fact.param.Value;
                     break;
             }
         }
@@ -216,11 +269,13 @@ public class vmachine : MonoBehaviour {
 
     int countRules(string filename)
     {
-        StreamReader reader = new StreamReader(Application.dataPath + "/" + filename, Encoding.Default);
+        StreamReader reader = new StreamReader(filename, Encoding.Default);
 
         string file = reader.ReadToEnd();
 
         int countDefrule = System.Text.RegularExpressions.Regex.Matches(file.ToLower(), "defrule").Count;
+
+        reader.Close();
 
         return countDefrule;
 
@@ -252,6 +307,12 @@ public class vmachine : MonoBehaviour {
         { return SMALLER; }
         if (opcode == "=" || opcode.ToLower() == "equals")
         { return EQUAL; }
+        if (opcode.ToLower() == "following")
+        { return FOLLOWING; }
+        if (opcode.ToLower() == "notfollowing")
+        { return NOTFOLLOWING; }
+        if (opcode.ToLower() == "speed")
+        { return SPEED; }
         else return WRONG_OPCODE;
     }
 }

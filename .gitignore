@@ -3,3 +3,6 @@ Library/
 Temp/
 *.sln
 *.csproj
+EnemyScripts/
+VideoGameTheGame_Data/
+*.exe
